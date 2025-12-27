@@ -30,3 +30,6 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t telco-churn-api .
+      - name: Run container (deploy simulation)
+        run: |
+          docker run -d -p 8000:8000 telco-churn-api
