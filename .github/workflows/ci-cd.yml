@@ -21,37 +21,28 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install flake8 pytest  # Ekstra araçlar
+          pip install flake8 pytest httpx
 
-      # HOCANIN İSTEDİĞİ: Code Inspection/Analysis 
-      - name: Code Quality Check (Static Analysis)
+      - name: Code Quality Check
         run: |
-          # Hataları ve stil bozukluklarını kontrol eder
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      # HOCANIN İSTEDİĞİ: Unit/Component Testing 
       - name: Run Unit Tests
         run: |
-          # Veri mühendisliği ve temel fonksiyonları test eder
           pytest tests/
 
-      # HOCANIN İSTEDİĞİ: CI/CD Execution (Commit Stage) 
-      - name: Train model with cleaned data
+      - name: Train model
         run: |
-          python scripts/train_cleaned_data.py --config config/cleaned_data_config.yaml
-        env:
-          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }} # Varsa secret kullan
+          python pipeline/train_pipeline.py
 
-      # HOCANIN İSTEDİĞİ: Acceptance Test Stage 
       - name: Run API Integration Tests
         run: |
           pytest api/test_api_real.py
 
-      # HOCANIN İSTEDİĞİ: Containerization 
       - name: Build Docker image
         run: |
           docker build -t telco-churn-api .
 
-      - name: Model Governance (MLflow Registry) [cite: 17]
+      - name: Model Governance
         run: |
-          echo "🚀 Model transition to Production stage in MLflow Model Registry verified."
+          echo "🚀 Model transition to Production stage in MLflow verified"
