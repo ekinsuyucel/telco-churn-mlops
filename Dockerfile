@@ -1,24 +1,22 @@
-FROM python:3.9-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY app/ .
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# 1️⃣ Base image
 FROM python:3.10-slim
 
+# 2️⃣ Çalışma dizini
 WORKDIR /app
 
-COPY requirements.txt .
+# 3️⃣ Sistem bağımlılıkları (xgboost, numpy vs için)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
+# 4️⃣ Python bağımlılıkları
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app/ app/
+# 5️⃣ Proje dosyaları
+COPY scripts/ scripts/
+COPY config/ config/
+COPY data/ data/
 
-EXPOSE 8000
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# 6️⃣ Default çalışacak komut
+CMD ["python", "scripts/train_cleaned_data.py", "--config", "config/telco_cleaned.yaml"]
