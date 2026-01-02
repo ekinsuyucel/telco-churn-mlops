@@ -27,10 +27,13 @@ jobs:
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      - name: Run Unit Tests
-        run: |
-          pytest tests/
+      - name: Run API tests
+        run: PYTHONPATH=. pytest api/test_api_real.py -v
 
+      - name: Run pytest
+        run: |
+          export PYTHONPATH=.
+          pytest api/test_api_real.py
       - name: Train model
         run: |
           python pipeline/train_pipeline.py
