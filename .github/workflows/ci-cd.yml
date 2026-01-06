@@ -55,12 +55,12 @@ jobs:
           # Konteyneri başlat
           docker run -d -p 8000:8000 --name prediction-service telco-churn-api
           
-          # Servisin hazır olması için biraz bekle
+          # Servisin hazır olması için bekle (Önemli: 15 saniye verelim)
           sleep 15
           
-          # Hata ayıklama: Konteyner çalışıyor mu ve loglar ne diyor?
-          docker ps
+          # Logları gör (Eğer hata olursa nedenini anlamanı sağlar)
           docker logs prediction-service
           
-          # Pytest'i python modülü olarak çağır (En güvenli yol)
+          # PYTEST'İ PYTHON MODÜLÜ OLARAK ÇALIŞTIR (Hatanın kesin çözümü)
+          export PYTHONPATH=$PYTHONPATH:.
           python -m pytest tests/test_smoke.py -v
