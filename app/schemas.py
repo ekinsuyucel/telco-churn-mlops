@@ -2,15 +2,24 @@ from pydantic import BaseModel
 from typing import Optional
 
 class PredictRequest(BaseModel):
-    # ZORUNLU (testin kullandıkları)
     tenure: int
-    monthly_charges: float
-    contract_type: str
-
-    # High-cardinality feature'lar
+    MonthlyCharges: float
+    Contract: str
+    PaymentMethod: str
+    gender: str
     service_combo_id: str
     geo_code: str
-
-    # Opsiyonel (training tarafında olabilir)
-    gender: Optional[str] = None
-    SeniorCitizen: Optional[int] = None
+    # Opsiyonel alanlar (Varsayılan değerlerle)
+    SeniorCitizen: int = 0
+    Partner: str = "No"
+    Dependents: str = "No"
+    PhoneService: str = "Yes"
+    MultipleLines: str = "No"
+    InternetService: str = "Fiber optic"
+    OnlineSecurity: str = "No"
+    OnlineBackup: str = "No"
+    DeviceProtection: str = "No"
+    TechSupport: str = "No"
+    StreamingTV: str = "No"
+    StreamingMovies: str = "No"
+    PaperlessBilling: str = "Yes"
