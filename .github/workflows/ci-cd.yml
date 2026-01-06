@@ -48,12 +48,19 @@ jobs:
           docker build -t telco-churn-api .
 
       - name: 3. Run Smoke Test (Acceptance Gate)
-        # Part 2 - Task 3: Container'ı kaldırıp canlılık testi yapar
         run: |
-          # Container'ı arka planda başlat
+          # Varsa eski konteyneri temizle
+          docker rm -f prediction-service || true
+          
+          # Konteyneri başlat
           docker run -d -p 8000:8000 --name prediction-service telco-churn-api
-          # Servisin hazır olması için bekle
-          sleep 10
-          # Smoke test scriptini çalıştır (200 OK doğrulaması)
-          export PYTHONPATH=.
-          pytest tests/test_smoke.py -v
+          
+          # Servisin hazır olması için biraz bekle
+          sleep 15
+          
+          # Hata ayıklama: Konteyner çalışıyor mu ve loglar ne diyor?
+          docker ps
+          docker logs prediction-service
+          
+          # Pytest'i python modülü olarak çağır (En güvenli yol)
+          python -m pytest tests/test_smoke.py -v
