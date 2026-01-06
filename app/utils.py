@@ -11,6 +11,12 @@ class HashingTransformer(BaseEstimator, TransformerMixin):
         return self
         
     def transform(self, X):
-        # API ve Training'de ortak kullanılan dönüşüm mantığı
+        # --- PART 3: SABOTAGE START ---
+        # Ödev gereği bilerek hata fırlatıyoruz (The Sabotage)
+        # Bu satır CI pipeline'daki Unit Test aşamasını patlatacaktır.
+        raise ValueError("STOP THE LINE: Sabotaj testi için bilerek hata fırlatıldı!") 
+        # --- PART 3: SABOTAGE END ---
+
+        # Aşağıdaki kod normalde çalışan kısımdır ama yukarıdaki hata yüzünden çalışmayacaktır
         tokens = [[f"{c}={val}" for c, val in zip(self.cols, row)] for row in X[self.cols].values]
         return self.hasher_.transform(tokens)
