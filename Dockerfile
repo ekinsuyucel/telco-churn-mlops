@@ -6,9 +6,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kodları ve modeli kopyala
+# Proje dosyalarını ve modeli kopyala
 COPY app/ ./app/
 COPY models/ ./models/
 
-# API'yi çalıştır
-CMD ["uvicorn", "app.main:app", "--host", "0.0.1", "--port", "8000"]
+# API'yi python modülü üzerinden çalıştır (En güvenli yol)
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
