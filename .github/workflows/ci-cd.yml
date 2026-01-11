@@ -17,26 +17,28 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        # Burası kütüphanelerin yüklendiğinden emin olduğumuz yer
+       
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install flake8 pytest requests
 
       - name: Code Analysis (Linting) [Part 1 Task 3]
-        # Ödev kuralı: Stil hatası varsa build durmalı [cite: 14, 15]
+        
         run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
       - name: Unit Testing [Part 1 Task 2]
-        # Ödev kuralı: Hashing mantığı test edilmeli [cite: 11, 13]
+        
         run: python -m pytest tests/test_unit.py -v
 
+      - name: Component Testing [Part 2 Task 1]
+        run: python -m pytest tests/test_components.py -v
+
       - name: Build & Package (Docker) [Part 2 Task 2]
-        # Ödev kuralı: Binary sadece bir kez oluşturulur [cite: 21, 22]
         run: docker build -t telco-churn-api .
 
       - name: Smoke Test [Part 2 Task 3]
-        # Ödev kuralı: Container ayağa kalkmalı ve 200 OK vermeli [cite: 23, 24]
+       
         run: |
           docker run -d -p 8000:8000 --name prediction-service telco-churn-api
           sleep 15
